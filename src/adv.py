@@ -1,4 +1,5 @@
 from room import Room
+from player import Player
 
 # Declare all the rooms
 
@@ -49,3 +50,61 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+def start_game():
+    player = Player("Waverly", room['outside'])
+
+    print(f"You're name is {player.name}\n")
+
+    playing = True
+
+    def select_room(room, player_input):
+
+        no_room_message = "\nYou couldn't find a room that direction."
+
+        if player_input == "n":
+            if not hasattr(room, "n_to"):
+                print(no_room_message)
+                return room
+            return room.n_to
+
+        elif player_input == "s":
+            if not hasattr(room, "s_to"):
+                print(no_room_message)
+                return room
+            return room.s_to
+
+        elif player_input == "e":
+            if not hasattr(room, "e_to"):
+                print(no_room_message)
+                return room
+            return room.e_to
+
+        elif player_input == "w":
+            if not hasattr(room, "w_to"):
+                print(no_room_message)
+                return room
+            return room.w_to
+
+        elif player_input == "q":
+            print("\nGame has been exited")
+            nonlocal playing
+            playing = False
+            return room
+
+        else:
+            print("\nPlease enter n, s, e, w\n")
+            return room
+
+
+    while playing:
+        print(f"You are in the {player.current_room.name} \n")
+        print(player.current_room.description)
+
+        player_input = input(
+            "\nWhich direction would you like to go? [n, s, e, w] \n")
+
+        player.current_room = select_room(player.current_room, player_input)
+
+        print("\n -------------------------------------- \n")
+
+start_game()
